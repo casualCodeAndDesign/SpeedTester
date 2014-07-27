@@ -1,7 +1,8 @@
 function love.load()
 	math.randomseed(os.time())
+	screenWidth = love.graphics.getWidth()
+	screenHeight = love.graphics.getHeight()
 
-	
 	points = 0
 	love.window.setTitle("SpeedTester")
 	background = love.graphics.newImage("speed_test_bg.png")
@@ -13,7 +14,11 @@ function love.load()
 	yellowOn = love.graphics.newImage("yellow_on.png")
 	redOn = love.graphics.newImage("red_on.png")
 	
+	img_x = 80
+	img_y = 80
+	
 	game_status = false
+	sound = true
 	print("Ikkunan koko " .. love.graphics.getWidth() ..
 		" x " .. love.graphics.getHeight())
 
@@ -40,12 +45,17 @@ function love.draw()
 	--love.graphics.print("Points: " .. points, 400, 575)
 	love.graphics.setColor(255, 255, 255)	
 	love.graphics.draw(background, 0 , 0)
-	
+	love.graphics.draw(startGame, 45, 71) --45, 630
+	love.graphics.draw(change_soundMode(), 645, 57)
 	draw_button()
 end
 
 function love.mousepressed(x, y, button)
 	if button == "l" then
+		if x >= x and x < x + soundOn:getWidth() and y >= y and y < y + soundOff:getHeight() then
+			print ("Painettu kuvan päällä")
+		end
+	else 
 		print("Painettu kohdassa " .. x .. " " .. y)
 	end
 	return x,y
@@ -61,6 +71,14 @@ end
 
 function draw_button()
 
+end
+
+function change_soundMode()
+	if sound then
+		return soundOn
+	else
+		return soundOff
+	end
 end
 
 function game_step()
