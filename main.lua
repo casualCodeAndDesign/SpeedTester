@@ -5,6 +5,11 @@ function love.load()
 	
 	points = 0
 	love.window.setTitle("SpeedTester")
+	background = love.graphics.newImage("speed_test_bg.png")
+	startGame = love.graphics.newImage("start_game.png")
+	soundOn = love.graphics.newImage("sound_on.png")
+	soundOff = love.graphics.newImage("sound_off.png")
+	
 	print("Peli alustettu")
 end
 
