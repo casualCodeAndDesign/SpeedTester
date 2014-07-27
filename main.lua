@@ -22,6 +22,8 @@ function love.draw()
 		--love.graphics.circle("fill", v.x, v.y, v.radius)
 	--end
 	--love.graphics.print("Points: " .. points, 400, 575)
+	love.graphics.setColor(255, 255, 255)	
+	love.graphics.draw(background, 0 , 0)
 end
 
 function love.mousepressed(x, y, button)
