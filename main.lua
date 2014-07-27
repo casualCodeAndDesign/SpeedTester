@@ -25,8 +25,8 @@ function love.load()
 	gameOver_sound = love.audio.newSource("game_over.wav", "static")
 	
 	
-	img_x = 80
-	img_y = 80
+	--img_x = 80
+	--img_y = 80
 	
 	game_status = false
 	sound = true
