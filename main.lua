@@ -5,6 +5,8 @@ function love.load()
 
 	points = 0
 	love.window.setTitle("SpeedTester")
+	
+	--Pelin kuvat
 	background = love.graphics.newImage("speed_test_bg.png")
 	startGame = love.graphics.newImage("start_game.png")
 	soundOn = love.graphics.newImage("sound_on.png")
@@ -13,6 +15,15 @@ function love.load()
 	blueOn = love.graphics.newImage("blue_on.png")
 	yellowOn = love.graphics.newImage("yellow_on.png")
 	redOn = love.graphics.newImage("red_on.png")
+	
+	--Pelin äänet
+	blue_sound = love.audio.newSource("blue.wav", "static")
+	green_sound = love.audio.newSource("green.wav", "static")
+	yellow_sound = love.audio.newSource("yellow.wav", "static")
+	red_sound = love.audio.newSource("red.wav", "static")
+	start_sound = love.audio.newSource("go.wav", "static")
+	gameOver_sound = love.audio.newSource("game_over.wav", "static")
+	
 	
 	img_x = 80
 	img_y = 80
@@ -52,10 +63,6 @@ end
 
 function love.mousepressed(x, y, button)
 	if button == "l" then
-		if x >= x and x < x + soundOn:getWidth() and y >= y and y < y + soundOff:getHeight() then
-			print ("Painettu kuvan päällä")
-		end
-	else 
 		print("Painettu kohdassa " .. x .. " " .. y)
 	end
 	return x,y
