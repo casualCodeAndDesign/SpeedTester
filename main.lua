@@ -4,8 +4,8 @@ function love.load()
 	screenHeight = love.graphics.getHeight()
 
 	points = 0
-	max_levels = 6
-	current_level = 9
+	max_levels = 9
+	current_level = 1
 	
 	love.window.setTitle("SpeedTester")
 	
@@ -36,7 +36,7 @@ function love.load()
 	--img_x = 80
 	--img_y = 80
 	
-	game_status = false
+	game_is_started = false
 	sound_is_on = true
 	sound_icon = soundOn
 	
@@ -66,14 +66,19 @@ function love.draw()
 	--love.graphics.print("Points: " .. points, 400, 575)
 	love.graphics.setColor(255, 255, 255)	
 	love.graphics.draw(background, 0 , 0)
-	love.graphics.draw(startGame, 45, 75) --45, 630
+
+	if game_is_started == false then
+		love.graphics.draw(startGame, 45, 75) --45, 630
+	end
 	love.graphics.draw(sound_icon, 635, 75)
 	love.graphics. draw(settings, 703, 75)
 	draw_button()
 	love.graphics.setColor(255, 2 , 9)
 	love.graphics.print("0", 220, 295) --nykyiset pisteet
 	love.graphics.print("0", 588, 295) --piste ennätys
-	level_info()
+	if  game_is_started then
+		level_info()
+	end
 end
 
 function love.mousepressed(x, y, button)
@@ -85,6 +90,7 @@ function love.mousepressed(x, y, button)
 	if button == "l" then
 		if x > player_hit_start.x and y > player_hit_start.y and x < player_hit_start.x + player_hit_start.width and y < player_hit_start.y + player_hit_start.height then
 			print("Painettu start game")
+			game_start()
 		elseif x > sound.x and y > sound.y and x < sound.x + sound.width and y < sound.y + sound.height then
 				print("Painettu sound buttonia")
 				change_soundMode()
@@ -122,7 +128,8 @@ function change_soundMode()
 end
 
 function game_start()
-	love.graphics.circle()
+	game_is_started = true
+	love.audio.play(start_sound)
 end
 
 function level_info()
