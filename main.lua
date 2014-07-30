@@ -1,9 +1,12 @@
+require("Tserial")
 function love.load()
+	loadData()
 	math.randomseed(os.time())
 	screenWidth = love.graphics.getWidth()
 	screenHeight = love.graphics.getHeight()
 
 	points = 0
+	max_points = 0
 	max_levels = 9
 	current_level = 1
 	missed = 0
@@ -51,15 +54,17 @@ function love.load()
 	-- kutsutaan game_step() funktiota kerran sekunnissa
 	game_step_time = 2.0
 	print("Peli alustettu")
+	
+	saved_data = {sound_is_on, max_points}
 end
 
 function love.update(deltaTime)
 	game_time = game_time + deltaTime
-	if game_time >= game_step_time then
-		game_time = game_time - game_step_time
-		game_step()
-	--elseif player_did_miss == false then
-		--game_step()
+	if game_is_started == true then
+		if game_time >= game_step_time then
+			game_time = game_time - game_step_time
+			game_step()
+		end
 	end
 end
 
@@ -86,7 +91,7 @@ function love.draw()
 
 	love.graphics.setColor(255, 2 , 9)
 	love.graphics.print(points, 220, 295) --nykyiset pisteet
-	love.graphics.print("0", 588, 295) --piste ennätys
+	love.graphics.print(max_points, 588, 295) --piste ennätys
 	
 end
 
@@ -123,6 +128,7 @@ end
 function draw_button()
 	
 	button_color = color_index
+	love.graphics.setColor(255,255,255)
 	
 	if button_color == 1 then --green
 		love.graphics.draw(greenOn, 27, 422)
@@ -151,6 +157,7 @@ function game_start()
 	if sound_is_on == true then
 		love.audio.play(start_sound)
 	end
+	points = 0
 	game_is_started = true
 	
 end
@@ -173,7 +180,6 @@ end
 
 function game_step()
 	print("Askellus")
-	previous_index = 0
 	
 	color_index = math.random(1,4)
 	
@@ -202,33 +208,81 @@ end
 
 function love.keypressed(key)
 	
-	if color_index == 1 and key == "a" then
-		print("Painettu " .. key .. "osui")
-		player_did_miss = false
-		points = points + 1
-		game_step()
-	elseif color_index == 2 and key == "s" then
-		print("Painettu " .. key .. "osui")		
-		player_did_miss = false
-		points = points + 1
-		game_step()
-	elseif color_index == 3 and key == "d" then
-		print("Painettu " .. key .. "osui")
-		player_did_miss = false
-		points = points + 1
-		game_step()
-	elseif color_index == 4 and key == "f" then
-		print("Painettu " .. key .. "osui")
-		player_did_miss = false
-		points = points + 1
-		game_step()
+	if color_index == 1 then
+		if key == "a" then
+			print("Painettu " .. key .. "osui")
+			player_did_miss = false
+			points_calculator()
+			game_step()
+		else
+			game_over()
+		end
+	elseif color_index == 2 then
+		if key == "s" then
+			print("Painettu " .. key .. "osui")		
+			player_did_miss = false
+			points_calculator()
+			game_step()
+		else
+			game_over()
+		end
+	elseif color_index == 3 then
+		if key == "d" then
+			print("Painettu " .. key .. "osui")
+			player_did_miss = false
+			points_calculator()
+			game_step()
+		else
+			game_over()
+		end
+	elseif color_index == 4 then
+		if key == "f" then
+			print("Painettu " .. key .. "osui")
+			player_did_miss = false
+			points_calculator()
+			game_step()
+		else
+			game_over()
+		end
 	else
 		player_did_miss = true
 	end
 end
 
+function points_calculator()
+	if game_is_started == true then
+		points = points + 1
+	end
+end
+
+function saveData()
+	local file =  love.filesystem.newFile( "data.txt" )
+	file:open("w")
+	file:write( TSerial.pack(saved_data) )
+	file:close()
+end
+
+
+function loadData()
+  
+  local file
+  love.filesystem.setIdentity( "SpeedTester" )
+  if love.filesystem.exists( "data.txt" ) then
+    file = love.filesystem.newFile( "data.txt" )
+    file:open("r")
+    options = TSerial.unpack( file:read() )
+    file:close()
+  end
+end
+
 function game_over()
 	print("game over")
+	color_index = math.random(1,4)
+	game_is_started = false
+	if points > max_points then
+		max_points = points
+	end
+	saveData()
 end
 
 function love.quit()
