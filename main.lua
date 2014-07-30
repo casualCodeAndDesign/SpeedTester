@@ -1,4 +1,4 @@
-require("Tserial")
+require("files/Tserial")
 function love.load()
 	loadData()
 	math.randomseed(os.time())
@@ -15,28 +15,28 @@ function love.load()
 	love.window.setTitle("SpeedTester")
 	
 	--pelin fontti
-	font = love.graphics.newFont("Let's go Digital Regular.ttf", 44)
+	font = love.graphics.newFont("files/Let's go Digital Regular.ttf", 44)
 	love.graphics.setFont(font)
 	
 	--Pelin kuvat
-	background = love.graphics.newImage("speed_test_bg.png")
-	startGame = love.graphics.newImage("start_game.png")
-	soundOn = love.graphics.newImage("sound_on.png")
-	soundOff = love.graphics.newImage("sound_off.png")
-	greenOn = love.graphics.newImage("green_on.png")
-	blueOn = love.graphics.newImage("blue_on.png")
-	yellowOn = love.graphics.newImage("yellow_on.png")
-	redOn = love.graphics.newImage("red_on.png")
-	settings = love.graphics.newImage("settings.png")
+	background = love.graphics.newImage("pics/speed_test_bg.png")
+	startGame = love.graphics.newImage("pics/start_game.png")
+	soundOn = love.graphics.newImage("pics/sound_on.png")
+	soundOff = love.graphics.newImage("pics/sound_off.png")
+	greenOn = love.graphics.newImage("pics/green_on.png")
+	blueOn = love.graphics.newImage("pics/blue_on.png")
+	yellowOn = love.graphics.newImage("pics/yellow_on.png")
+	redOn = love.graphics.newImage("pics/red_on.png")
+	settings = love.graphics.newImage("pics/settings.png")
 	
 	--Pelin äänet
-	blue_sound = love.audio.newSource("blue.wav", "static")
-	green_sound = love.audio.newSource("green.wav", "static")
-	yellow_sound = love.audio.newSource("yellow.wav", "static")
-	red_sound = love.audio.newSource("red.wav", "static")
-	start_sound = love.audio.newSource("go.wav", "static")
-	gameOver_sound = love.audio.newSource("game_over.wav", "static")
-	levelUp_sound = love.audio.newSource("level_up.wav", "static")
+	blue_sound = love.audio.newSource("sounds/blue.wav", "static")
+	green_sound = love.audio.newSource("sounds/green.wav", "static")
+	yellow_sound = love.audio.newSource("sounds/yellow.wav", "static")
+	red_sound = love.audio.newSource("sounds/red.wav", "static")
+	start_sound = love.audio.newSource("sounds/go.wav", "static")
+	gameOver_sound = love.audio.newSource("sounds/game_over.wav", "static")
+	levelUp_sound = love.audio.newSource("sounds/level_up.wav", "static")
 	
 	
 	--img_x = 80
@@ -56,6 +56,8 @@ function love.load()
 	print("Peli alustettu")
 	
 	saved_data = {sound_is_on, max_points}
+	sound_is_on = saved_data[1]
+		max_points = saved_data[2]
 end
 
 function love.update(deltaTime)
@@ -256,19 +258,27 @@ function points_calculator()
 end
 
 function saveData()
-	local file =  love.filesystem.newFile( "data.txt" )
+	local file =  love.filesystem.newFile("files/data.txt")
 	file:open("w")
 	file:write( TSerial.pack(saved_data) )
 	file:close()
+	
+	is_saved_before = love.filesystem.exists("files/settings.txt")
+	
+	if is_saved_before == false then
+		saveFile = love.filesystem.newFile("files/settings.txt")
+	end
+	
+	success, errormsg = love.filesystem.append( "files/settings.txt", max_points, all )
 end
 
 
 function loadData()
   
   local file
-  love.filesystem.setIdentity( "SpeedTester" )
-  if love.filesystem.exists( "data.txt" ) then
-    file = love.filesystem.newFile( "data.txt" )
+  love.filesystem.setIdentity("SpeedTester")
+  if love.filesystem.exists("files/data.txt") then
+    file = love.filesystem.newFile("files/data.txt")
     file:open("r")
     options = TSerial.unpack( file:read() )
     file:close()
