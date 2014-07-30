@@ -148,8 +148,11 @@ function change_soundMode()
 end
 
 function game_start()
+	if sound_is_on == true then
+		love.audio.play(start_sound)
+	end
 	game_is_started = true
-	love.audio.play(start_sound)
+	
 end
 
 function level_info()
@@ -175,14 +178,16 @@ function game_step()
 	color_index = math.random(1,4)
 	
 	if game_is_started then
-		if color_index == 1 then
-			love.audio.play(green_sound)
-		elseif color_index  == 2 then
-			love.audio.play(blue_sound)		
-		elseif color_index == 3 then
-			love.audio.play(yellow_sound)	
-		else
-			love.audio.play(red_sound)
+		if sound_is_on == true then
+			if color_index == 1 then
+				love.audio.play(green_sound)
+			elseif color_index  == 2 then
+				love.audio.play(blue_sound)		
+			elseif color_index == 3 then
+				love.audio.play(yellow_sound)	
+			else
+				love.audio.play(red_sound)
+			end
 		end
 	end
 	
