@@ -55,9 +55,9 @@ function love.load()
 	game_step_time = 2.0
 	print("Peli alustettu")
 	
-	saved_data = {sound_is_on, max_points}
-	sound_is_on = saved_data[1]
-		max_points = saved_data[2]
+	saved_data = {}
+	saved_data.soundMode = sound_is_on
+	saved_data.highscore =	max_points
 end
 
 function love.update(deltaTime)
